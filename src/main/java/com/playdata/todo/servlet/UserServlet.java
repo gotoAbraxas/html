@@ -23,13 +23,12 @@ public class UserServlet extends HttpServlet {
        String username =  req.getParameter("username");
        String password = req.getParameter("password");
        String name = req.getParameter("name");
-       resp.setStatus(201);
-
         User user = new User(null,username,password,name,null);
         UserDao userDao = new UserDao();
         userDao.insert(user);
 
-        resp.sendRedirect("/user");
+        resp.sendRedirect("/login");
+        resp.setStatus(201);
    //    super.doPost(req, resp);
     }
 }
