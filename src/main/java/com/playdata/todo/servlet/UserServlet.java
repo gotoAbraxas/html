@@ -1,5 +1,8 @@
 package com.playdata.todo.servlet;
 
+import com.playdata.todo.dao.UserDao;
+import com.playdata.todo.dto.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +24,11 @@ public class UserServlet extends HttpServlet {
        String password = req.getParameter("password");
        String name = req.getParameter("name");
        resp.setStatus(201);
-        System.out.println(username);
-        System.out.println(password);
-        System.out.println(name);
+
+        User user = new User(null,username,password,name,null);
+        UserDao userDao = new UserDao();
+        userDao.insert(user);
+
         resp.sendRedirect("/user");
    //    super.doPost(req, resp);
     }
