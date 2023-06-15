@@ -9,27 +9,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class UserServlet extends HttpServlet {
+public class loginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setStatus(200);
-        req.getRequestDispatcher("views/user.html").forward(req,resp);
+        req.getRequestDispatcher("views/join.html").forward(req,resp);
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       String username =  req.getParameter("username");
-       String password = req.getParameter("password");
-       String name = req.getParameter("name");
-       resp.setStatus(201);
+        String username =  req.getParameter("username");
+        String password = req.getParameter("password");
+        resp.setStatus(201);
 
-        User user = new User(null,username,password,name,null);
         UserDao userDao = new UserDao();
-        userDao.insert(user);
+        if (userDao.login(username,password)){
 
-        resp.sendRedirect("/main");
-   //    super.doPost(req, resp);
+            resp.sendRedirect("/main");
+        }else{
+            resp.sendRedirect("/user");
+        }
+
+        //    super.doPost(req, resp);
     }
 }
