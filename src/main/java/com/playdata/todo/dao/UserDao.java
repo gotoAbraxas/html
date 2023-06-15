@@ -1,6 +1,7 @@
 package com.playdata.todo.dao;
 
 import com.playdata.todo.config.JdbcConnection;
+import com.playdata.todo.config.LogoutThread;
 import com.playdata.todo.dto.User;
 
 import java.sql.Connection;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao { // 데이터 엑세스 오브젝트
+    public static User me;
+
     public  void insert(User user){
         Connection conn = new JdbcConnection().getJdbc();
         String sql = "insert into users(username, password, name)"+
@@ -41,17 +44,25 @@ public class UserDao { // 데이터 엑세스 오브젝트
             ResultSet resultSet = pst.executeQuery();
             while(resultSet.next()){
                 users.add(makeUser(resultSet));
+                System.out.println(users.get(0));
             }
 
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
-        return users.size() != 0;
+        if(users.size() != 0){
+            me = users.get(0);
+            new LogoutThread().start();
+            return true;
+        }
+        return false;
     }
 
     private User makeUser(ResultSet resultSet){
         Integer id;
         String password, username, name, createAt;
+
+
         try {
             id = resultSet.getInt("id");
         }catch (SQLException e) {
@@ -69,15 +80,15 @@ public class UserDao { // 데이터 엑세스 오브젝트
         }
         try {
             name = resultSet.getString("name");
-        }catch (SQLException e) {
+           }catch (SQLException e) {
             name = null;
         }
         try {
-            createAt = resultSet.getString("createAt");
+            createAt = resultSet.getString("create_at");
         }catch (SQLException e) {
             createAt = null;
         }
-        return new User(id,username,password,name,createAt);
+        return new User(id,username,name,password,createAt);
     }
 
 }

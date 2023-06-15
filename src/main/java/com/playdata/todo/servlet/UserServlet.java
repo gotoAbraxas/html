@@ -23,7 +23,7 @@ public class UserServlet extends HttpServlet {
        String username =  req.getParameter("username");
        String password = req.getParameter("password");
        String name = req.getParameter("name");
-        User user = new User(null,username,password,name,null);
+        User user = new User(null,username,name,password,null);
         UserDao userDao = new UserDao();
         userDao.insert(user);
 
