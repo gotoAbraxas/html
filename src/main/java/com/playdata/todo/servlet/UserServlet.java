@@ -1,5 +1,6 @@
 package com.playdata.todo.servlet;
 
+import com.playdata.todo.config.History;
 import com.playdata.todo.dao.UserDao;
 import com.playdata.todo.dto.User;
 
@@ -13,6 +14,7 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        History.setHistory(req, resp);
         resp.setStatus(200);
         req.getRequestDispatcher("views/user.html").forward(req,resp);
 
@@ -23,7 +25,7 @@ public class UserServlet extends HttpServlet {
        String username =  req.getParameter("username");
        String password = req.getParameter("password");
        String name = req.getParameter("name");
-        User user = new User(null,username,password,name,null);
+        User user = new User(null,username,name,password,null);
         UserDao userDao = new UserDao();
         userDao.insert(user);
 

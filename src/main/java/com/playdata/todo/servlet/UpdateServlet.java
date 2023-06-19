@@ -5,27 +5,30 @@ import com.playdata.todo.dao.UserDao;
 import com.playdata.todo.dto.User;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 import java.io.IOException;
 
-public class LoginServlet extends HttpServlet {
-
+public class UpdateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        History.setHistory(req, resp);
-
-        req.getRequestDispatcher("views/login.html").forward(req,resp);
+        req.getRequestDispatcher("views/userupdate.html").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
 
+        int id = (Integer) session.getAttribute("uid");
 
-        String username = req.getParameter("username");
+        String username = req.getParameter("name");
         String password = req.getParameter("password");
 
-        User user = new UserDao().login(username,password);
+        new UserDao().userUpdate(id,username,password);
 //        Cookie cookie = new Cookie("uid",user.getId().toString());
 //        Cookie cookie2 = new Cookie("uname",user.getName());
 //        cookie.setMaxAge(100);
@@ -33,12 +36,8 @@ public class LoginServlet extends HttpServlet {
 //        resp.addCookie(cookie);
 //        resp.addCookie(cookie2);
 
-        HttpSession session = req.getSession();
-        session.setAttribute("uid",user.getId());
-        session.setAttribute("uname",user.getName());
-
-        if(user != null){
             resp.sendRedirect("/main");
-        }else resp.sendRedirect("/user");
-    }
+
+
+}
 }

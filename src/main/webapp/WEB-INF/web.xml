@@ -39,4 +39,24 @@
   </servlet-mapping>
 
 
+  <servlet>
+    <servlet-name>backServlet</servlet-name>
+    <servlet-class>com.playdata.todo.servlet.BackServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>backServlet</servlet-name>
+    <url-pattern>/back</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>updateServlet</servlet-name>
+    <servlet-class>com.playdata.todo.servlet.UpdateServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>updateServlet</servlet-name>
+    <url-pattern>/userupdate</url-pattern>
+  </servlet-mapping>
 </web-app>

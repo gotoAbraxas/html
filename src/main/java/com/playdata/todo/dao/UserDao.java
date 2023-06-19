@@ -27,7 +27,7 @@ public class UserDao { // 데이터 엑세스 오브젝트
         }
     }
 
-    public boolean login(String id,String password){
+    public User login(String id, String password){
         List<User> users = new ArrayList<User>();
 
         Connection conn = new JdbcConnection().getJdbc();
@@ -46,7 +46,11 @@ public class UserDao { // 데이터 엑세스 오브젝트
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
-        return users.size() != 0;
+
+        if(users.size()!=0){
+            return users.get(0);
+        }
+        return users.get(0);
     }
 
     private User makeUser(ResultSet resultSet){
@@ -77,7 +81,22 @@ public class UserDao { // 데이터 엑세스 오브젝트
         }catch (SQLException e) {
             createAt = null;
         }
-        return new User(id,username,password,name,createAt);
+        return new User(id,username,name,password,createAt);
     }
+    public  void userUpdate(int id,String name,String password){
+        Connection conn = new JdbcConnection().getJdbc();
+        String sql = "update users "+
+                "set password = ?, name = ? "+
+                "where id = ?";
+        try{
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,password);
+            pst.setString(2, name);
+            pst.setInt(3, id);
+            pst.executeUpdate();
 
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }
